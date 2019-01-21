@@ -1,6 +1,7 @@
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.*;
 import javafx.scene.control.*;
 
@@ -195,6 +196,7 @@ public class Main extends Application {
 			@Override
 			public void run() {
 				mp.seek(Duration.ZERO);
+				mp.play();
 				
 			}
 		});
@@ -207,8 +209,8 @@ public class Main extends Application {
 				
 			}
 		});
-		
-		
+		MediaView mpv = new MediaView(mp);
+		box.getChildren().add(mpv);
 		
 		stage.show();
 	}
