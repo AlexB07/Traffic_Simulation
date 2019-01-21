@@ -243,7 +243,7 @@ public class Environment implements Cloneable {
 
 	//Takes user input, validates it
 	public void isRubberNeckingTrue(boolean flag, String min, String max) {
-		if (!min.isEmpty() && !max.isEmpty() && flag) {
+		if (!min.isEmpty() && !max.isEmpty() && flag && getMultiple(Integer.parseInt(min)) != getMultiple(Integer.parseInt(max))) {
 			setRubberNeckingValues(Integer.parseInt(min) , Integer.parseInt(max));
 			this.rubberNecking = true;
 		} else {
