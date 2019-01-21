@@ -1,5 +1,7 @@
 import javafx.scene.canvas.*;
 import javafx.scene.paint.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.*;
 
 /** Class to display our environment (i.e. the road and the cars) */
@@ -16,10 +18,10 @@ public class Display extends Canvas
     /** Distance to move the display off the top of the panel */
     private int yOffset = 16;
     /** The Environment that we are displaying */
-    private Environment environment;
+    public Environment environment;
 
     public Display(Environment environment) {
-        super(800, 600);
+        super(800, 300);
         this.environment = environment;
     }
 
@@ -53,6 +55,7 @@ public class Display extends Canvas
         gc.strokeRect(xOffset + position, yOffset + lane * laneHeight + pad / 2, (int) environment.carLength(), laneHeight - pad);
         gc.setFill(color);
         gc.fillRect(xOffset + position, yOffset + lane * laneHeight + pad / 2, (int) environment.carLength(), laneHeight - pad);
+
     }
 
     /** Draw the whole display; we do the roads, then ask Environment to draw the cars */
@@ -92,4 +95,9 @@ public class Display extends Canvas
     public void setLaneHeight(int laneHeight) {
         this.laneHeight = laneHeight;
     }
+    //returns xOffSetValue
+    public int getXOffSet() {
+    	return xOffset;
+    }
+    
 }
