@@ -1,12 +1,18 @@
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.*;
 import javafx.scene.control.*;
+
+import java.io.File;
+import java.net.URL;
 import java.util.*;
 import javafx.scene.paint.*;
 import javafx.application.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.stage.*;
+import javafx.util.Duration;
 
 public class Main extends Application {
 
@@ -21,7 +27,7 @@ public class Main extends Application {
 		final Environment environment = new Environment();
 		final Display display = new Display(environment);
 		environment.setDisplay(display);
-
+		
 		// Data analysis labels
 		Label lblMean = new Label("Mean: N/a");
 		Label lblMedian = new Label("Median: N/a");
@@ -182,6 +188,28 @@ public class Main extends Application {
 		infromationCars.getChildren().addAll(btnUpdate, lblMean, lblMedian, lblMode, lblSD, lblRange);
 		box.getChildren().add(infromationCars);
 
+		URL mediaFile = getClass().getResource("traffic.mp3");
+		MediaPlayer mp = new MediaPlayer(new Media(mediaFile.toString()));
+		mp.setOnEndOfMedia(new Runnable() {
+			
+			@Override
+			public void run() {
+				mp.seek(Duration.ZERO);
+				
+			}
+		});
+		
+		mp.setOnReady(new Runnable() {
+			
+			@Override
+			public void run() {
+				mp.play();
+				
+			}
+		});
+		
+		
+		
 		stage.show();
 	}
 

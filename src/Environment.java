@@ -16,6 +16,7 @@ public class Environment implements Cloneable {
 	/** Number of lanes to have on the road */
 	private int lanes = 4;
 	private long last;
+	//Flag to stop cars accelerating in the rubber-necking period
 	private boolean rubberNeckingTakingPlace = false;
 	private Random rd = new Random();
 
@@ -171,7 +172,7 @@ public class Environment implements Cloneable {
 			Car inFront = nextCar(i);
 			if (inFront != null && i.getPosition() + carLength() >= inFront.getPosition() - 40) {
 				if (i.getSpeed() >= inFront.getSpeed()) {
-					double braking = (Math.abs(i.getSpeed() - inFront.getSpeed()) / brakingConditions*2);
+					double braking = (Math.abs(i.getSpeed() - inFront.getSpeed()) / (brakingConditions*10));
 					i.setSpeed(i.getSpeed() - braking);
 				}
 			}

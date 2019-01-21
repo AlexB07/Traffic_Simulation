@@ -14,7 +14,7 @@ public class Car {
 	/** Colour of this car's display */
 	private Color color;
 
-	// flag
+	// To know if a car has collided
 	private boolean collided;
 
 	public Car(double position, double speed, int lane, Color color) {
