@@ -241,7 +241,7 @@ public class Environment implements Cloneable {
 	}
 	
 
-
+	//Takes user input, validates it
 	public void isRubberNeckingTrue(boolean flag, String min, String max) {
 		if (!min.isEmpty() && !max.isEmpty() && flag) {
 			setRubberNeckingValues(Integer.parseInt(min) , Integer.parseInt(max));
@@ -250,11 +250,10 @@ public class Environment implements Cloneable {
 			this.rubberNecking = false;
 		}
 	}
-
+	//Setting values for rubber-necking to a multiple of 200
 	public void rubberNecking() {
 		if (rubberNecking) {
-			//System.out.println(display.getXOffSet() + "  " + minRubb + "  " + maxRubb);
-			
+			//Flag so that cars dont speed up from speedUp method
 			if (display.getXOffSet() == minRubb && !rubberNeckingTakingPlace) {
 				rubberNeckingTakingPlace = true;
 			}
@@ -279,7 +278,7 @@ public class Environment implements Cloneable {
 	public int getLanes() {
 		return lanes;
 	}
-
+	//Validates user input for setting number of lanes
 	public void setLanes(String lanes) {
 		if (!lanes.equals("Lanes")) {
 			this.lanes = Integer.parseInt(lanes);
@@ -287,7 +286,7 @@ public class Environment implements Cloneable {
 			this.lanes = 4;
 		}
 	}
-
+	//Validates user input for setting the braking efficiency
 	public void setBrakingConditions(String efficiency) {
 		if (!efficiency.equals("Road Conditions")) {
 			String[] split = efficiency.split(" ");
