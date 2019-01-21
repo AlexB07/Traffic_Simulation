@@ -103,6 +103,9 @@ public class Main extends Application {
 		txtMaxSpeed.setPromptText("Max Speed (In Pixels");
 		textBoxes.add(txtMaxSpeed);
 		vBTopRight.getChildren().add(txtMaxSpeed);
+		
+		
+		
 		vBTopRight.getChildren().add(lblDistance);
 		controls.getChildren().add(vBTopRight);
 		
@@ -163,7 +166,7 @@ public class Main extends Application {
 		//Updates car speed data
 		btnUpdate.setOnAction(e -> {
 			ArrayList<Double> temporaryList = getSpeedList(environment);
-			double temporaryMean = MeanCalculation(environment);
+			double temporaryMean = MeanCalculation(environment, temporaryList);
 			double temporaryMode = ModeCalculations(environment, temporaryList);
 			lblMean.setText("Mean: " + temporaryMean);
 			lblMedian.setText("Median: " + medianCalculations(environment, temporaryList));
@@ -205,16 +208,16 @@ public class Main extends Application {
 
 	// DATA ANALYSIS
 	// Calculating the mean of the set of cars
-	public static int MeanCalculation(Environment e) {
+	public static int MeanCalculation(Environment e, ArrayList<Double> list) {
 		int mean = 0;
-		for (Car i : e.getCars()) {
-			mean += i.getSpeed();
+		for (double speed : list) {
+			mean += speed;
 		}
-		mean = (mean / (e.getCars().size() - 1));
+		mean = (mean / (list.size()));
 		return mean;
 	}
 
-	// Caculating the median of the cars data set
+	// Calculating the median of the cars data set
 	public static double medianCalculations(Environment e, ArrayList<Double> carSpeeds) {
 		Collections.sort(carSpeeds);
 		int middle = ((carSpeeds.size() - 1) / 2);
@@ -257,18 +260,18 @@ public class Main extends Application {
 	}
 
 	// Calculating the standard deviation of the speed data set
-	public double calculateStandardDeviation(Environment e, double mean, ArrayList<Double> list) {
+	public String calculateStandardDeviation(Environment e, double mean, ArrayList<Double> list) {
 		double sd = 0.0;
 		for (double n : list) {
 			sd += Math.pow(n - mean, 2);
 		}
-		return Math.sqrt(sd / (list.size() - 1));
+		return  String.format( "%.5f", Math.sqrt(sd / (list.size() - 1)) );
 	}
 
 	// Returns the range in string form of the speed data set
 	public String calculateRange(Environment e, ArrayList<Double> list) {
 		Collections.sort(list);
-		return "Minimum: " + list.get(0) + " | Maximum " + list.get(list.size() - 1);
+		return "Minimum: " + String.format( "%.2f", list.get(0) ) + " | Maximum " + String.format( "%.2f", list.get(list.size()-1));
 	}
 	
 	//Sets label to distance

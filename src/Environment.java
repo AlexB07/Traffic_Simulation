@@ -16,6 +16,7 @@ public class Environment implements Cloneable {
 	/** Number of lanes to have on the road */
 	private int lanes = 4;
 	private long last;
+	private boolean rubberNeckingTakingPlace = false;
 	private Random rd = new Random();
 
 	// User condition (Braking efficiency)
@@ -62,7 +63,7 @@ public class Environment implements Cloneable {
 						furthest = i.getPosition();
 					}
 					//Update distance on Main
-					Main.setDistance(display.getXOffSet()*-1);
+					Main.setDistance(Environment.this.display.getXOffSet()*-1);
 				}
 				display.setEnd((int) furthest);
 				display.draw();
@@ -190,17 +191,19 @@ public class Environment implements Cloneable {
 
 	// Speed up car given traffic condition and road conditions
 	public void carSpeedUp() {
+		if (!rubberNeckingTakingPlace) {
 		for (Car i : cars) {
 			Car inFront = nextCar(i);
 			if (inFront != null && i.getPosition() + carLength() + 120 < inFront.getPosition()) {
-				double diffSpeed = rd.nextInt(maxSpeed) + maxSpeed - brakingConditions;
+				double diffSpeed = rd.nextInt(maxSpeed) + Math.abs(maxSpeed - brakingConditions*2);
 				if (i.getSpeed() + diffSpeed <= maxSpeed) {
 					// Working out what speed to set the car, when provided road conditions
-					i.setSpeed(diffSpeed);
+					i.setSpeed(i.getSpeed() + diffSpeed);
 				}
 			
 			}
 			//Sets car speed to max if no cars are in front
+			
 			if (inFront == null && i.getSpeed() < maxSpeed) {
 				i.setSpeed(maxSpeed);
 			}
@@ -208,6 +211,7 @@ public class Environment implements Cloneable {
 			//once stopped for crashed car infront, overtakes and keeps going
 			if (i.getSpeed() < 1 && i.getFlag() == false && inFront != null && i.getPosition() + carLength() + 60 < inFront.getPosition()) {
 				i.setSpeed(rd.nextInt(maxSpeed));
+				}
 			}
 		}
 	}
@@ -215,27 +219,32 @@ public class Environment implements Cloneable {
 	// Setting rubber necking values, and also doing some user validation
 	public void setRubberNeckingValues(int minRubb, int maxRubb) {
 		// Making sure the minimum and maximum are the correct way around
-		if (minRubb > maxRubb) {
+		if (minRubb < maxRubb) {
 			this.minRubb = minRubb;
 			this.maxRubb = maxRubb;
 		} else {
 			this.minRubb = maxRubb;
 			this.maxRubb = minRubb;
 		}
-		int validation = this.minRubb % 200;
-		if (validation != 0) {
-			this.minRubb -= (-200 + validation);
-		}
-		validation = this.maxRubb % 200;
-		if (validation != 0) {
-			this.maxRubb -= (-200 + validation);
-		}
-
+		this.minRubb = getMultiple(this.minRubb);
+		this.maxRubb = getMultiple(this.maxRubb);
 	}
+	//Returns a multiple of 200
+	public int getMultiple(int num) {
+		int res = num;
+		
+		if (num % 200 != 0 ) {
+			res += (200 - (num % 200));
+		}
+		return res*-1;
+		
+	}
+	
+
 
 	public void isRubberNeckingTrue(boolean flag, String min, String max) {
 		if (!min.isEmpty() && !max.isEmpty() && flag) {
-			setRubberNeckingValues(Integer.parseInt(min) * -1, Integer.parseInt(max) * -1);
+			setRubberNeckingValues(Integer.parseInt(min) , Integer.parseInt(max));
 			this.rubberNecking = true;
 		} else {
 			this.rubberNecking = false;
@@ -244,16 +253,24 @@ public class Environment implements Cloneable {
 
 	public void rubberNecking() {
 		if (rubberNecking) {
-			settingSpeed(30, 20, display.getXOffSet(), minRubb);
-			settingSpeed(70, 30, display.getXOffSet(), maxRubb);
+			//System.out.println(display.getXOffSet() + "  " + minRubb + "  " + maxRubb);
+			
+			if (display.getXOffSet() == minRubb && !rubberNeckingTakingPlace) {
+				rubberNeckingTakingPlace = true;
+			}
+			if (display.getXOffSet() == maxRubb && rubberNeckingTakingPlace) {
+				rubberNeckingTakingPlace = false;
+			}
+			settingSpeed((maxSpeed/2), display.getXOffSet(), minRubb);
+			settingSpeed(maxSpeed, display.getXOffSet(), maxRubb);
 		}
 	}
 
 	// set speed of all cars at a certain point
-	public void settingSpeed(int maxSpeed, int minSpeed, int xValue, int value) {
+	public void settingSpeed(int maxSpeed, int xValue, int value) {
 		if (xValue == value) {
 			for (Car i : cars) {
-				i.setSpeed(rd.nextInt(maxSpeed) + minSpeed);
+				i.setSpeed(rd.nextInt(maxSpeed) + 1);
 			}
 		}
 	}

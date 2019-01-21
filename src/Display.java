@@ -1,7 +1,5 @@
 import javafx.scene.canvas.*;
 import javafx.scene.paint.*;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.*;
 
 /** Class to display our environment (i.e. the road and the cars) */
